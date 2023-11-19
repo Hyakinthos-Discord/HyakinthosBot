@@ -12,6 +12,7 @@ import dev.schlaubi.lavakord.LavaKord
 import dev.schlaubi.lavakord.kord.lavakord
 import dev.schlaubi.lavakord.plugins.lavasrc.LavaSrc
 import dev.schlaubi.lavakord.plugins.sponsorblock.Sponsorblock
+import me.thecuddlybear.Bot.extensions.AnimeActionsExtension
 import me.thecuddlybear.Bot.extensions.HypixelExtension
 import me.thecuddlybear.Bot.extensions.MusicExtension
 import me.thecuddlybear.Bot.extensions.SlapExtension
@@ -33,6 +34,7 @@ suspend fun main() {
             add(::SlapExtension)
             add(::MusicExtension)
             add(::HypixelExtension)
+            add(::AnimeActionsExtension)
         }
 
         presence {
@@ -42,7 +44,7 @@ suspend fun main() {
         }
 
         applicationCommands {
-            defaultGuild("851831355229601844")
+            defaultGuild(dotenv["GUILD"])
         }
 
         chatCommands  {

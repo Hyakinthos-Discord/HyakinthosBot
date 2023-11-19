@@ -3,6 +3,7 @@ plugins {
 
     // Update this if you change the Kotlin version in libs.versions.toml
     kotlin("jvm") version "1.9.20"
+    kotlin("plugin.serialization") version "1.9.20"
 }
 
 repositories {
@@ -32,6 +33,8 @@ repositories {
     }
 }
 
+val ktor_version: String by project
+
 dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.kord.extensions)
@@ -45,13 +48,15 @@ dependencies {
     implementation("dev.schlaubi.lavakord:kord:5.1.7")
     implementation("dev.schlaubi.lavakord:sponsorblock:5.1.7")
     implementation("dev.schlaubi.lavakord:lavasrc:5.1.7")
-
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-cio:$ktor_version")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 }
 
 application {
     mainClass.set("me.thecuddlybear.Bot.AppKt")
 }
-
 
 tasks {
     val fatJar = register<Jar>("fatJar") {
