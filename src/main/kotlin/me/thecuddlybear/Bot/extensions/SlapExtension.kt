@@ -1,8 +1,10 @@
 package me.thecuddlybear.Bot.extensions
 
 import com.kotlindiscord.kord.extensions.extensions.Extension
+import com.kotlindiscord.kord.extensions.extensions.chatCommand
 import com.kotlindiscord.kord.extensions.extensions.publicMessageCommand
 import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
+import com.kotlindiscord.kord.extensions.utils.respond
 import dev.kord.cache.api.data.description
 
 class SlapExtension : Extension() {
@@ -18,6 +20,15 @@ class SlapExtension : Extension() {
                 respond {
                     content = "_Slaps ${user.mention} around a bit with a smelly trout!_"
                 }
+            }
+        }
+
+        chatCommand {
+            name = "slap"
+            description = "Get slapped!"
+
+            action {
+                message.respond("_Slaps ${user?.mention} around a bit with a smelly trout!_")
             }
         }
 
