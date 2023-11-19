@@ -3,15 +3,21 @@ package me.thecuddlybear.Bot
 import com.kotlindiscord.kord.extensions.ExtensibleBot
 import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
+import me.thecuddlybear.Bot.extensions.HypixelExtension
+import me.thecuddlybear.Bot.extensions.MusicExtension
 import me.thecuddlybear.Bot.extensions.SlapExtension
+import org.dotenv.vault.dotenvVault
 
-private val TOKEN = "MTEyMTAyMjM0ODkzNDUyNTAxOA.GC6BFi.nZ6RAobisQLDglXL92RGQHwoSkNiTSl6-DyxOQ"
+public val dotenv = dotenvVault()
+private val TOKEN = dotenv["TOKEN"]
 
 suspend fun main() {
 
     val bot = ExtensibleBot(TOKEN){
         extensions {
             add(::SlapExtension)
+            add(::MusicExtension)
+            add(::HypixelExtension)
         }
 
         applicationCommands {

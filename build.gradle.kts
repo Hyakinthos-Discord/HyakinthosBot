@@ -14,6 +14,12 @@ repositories {
         url = uri("https://oss.sonatype.org/content/repositories/snapshots")
     }
 
+    maven { url = uri("https://jitpack.io") }
+
+    maven { url = uri("https://repo.hypixel.net/repository/Hypixel/") }
+
+    maven { url = uri("https://eldonexus.de/repository/maven-public/") }
+
     maven {
         name = "Sonatype Snapshots"
         url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots")
@@ -24,7 +30,11 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.kord.extensions)
     implementation(libs.slf4j)
-    implementation("com.github.dotenv-org:dotenv-vault-kotlin:0.0.2")
+    implementation(libs.dotenv)
+    implementation("com.github.ryanhcode:KoPixel:0.2")
+    implementation("net.hypixel:hypixel-api:4.3")
+    implementation("net.hypixel:hypixel-api-transport-apache:4.3")
+    implementation("de.snowii:mojang-api:1.1.0")
 }
 
 application {

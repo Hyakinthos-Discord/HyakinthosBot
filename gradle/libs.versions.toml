@@ -3,9 +3,12 @@ kotlin = "1.9.20"  # Kotlin version must be updated in build.gradle.kts too
 
 kord-extensions = "1.6.0-SNAPSHOT"
 slf4j = "2.0.9"
+dotenv-vault = "0.0.2"
 
 [libraries]
 kord-extensions = { module = "com.kotlindiscord.kord.extensions:kord-extensions", version.ref = "kord-extensions" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
+
+dotenv = { module = "com.github.dotenv-org:dotenv-vault-kotlin", version.ref = "dotenv-vault"}
 
 slf4j = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
