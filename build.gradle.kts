@@ -24,6 +24,7 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.kord.extensions)
     implementation(libs.slf4j)
+    implementation("com.github.dotenv-org:dotenv-vault-kotlin:0.0.2")
 }
 
 application {
