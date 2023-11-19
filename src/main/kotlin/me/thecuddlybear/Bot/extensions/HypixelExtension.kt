@@ -141,6 +141,41 @@ class HypixelExtension : Extension() {
                                         value = player.player.getLongProperty("stats.Bedwars.deaths_bedwars", 0).toString()
                                         inline = true
                                     }
+                                    field{
+                                        name = "K/D Ratio"
+                                        value = (player.player.getLongProperty("stats.Bedwars.kills_bedwars", 0).toBigDecimal().setScale(2) / player.player.getLongProperty("stats.Bedwars.deaths_bedwars", 0).toBigDecimal().setScale(2)).toString()
+                                        inline = true
+                                    }
+                                    field {
+                                        name = "Final Kills"
+                                        value = player.player.getLongProperty("stats.Bedwars.final_kills_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field {
+                                        name = "Final Deaths"
+                                        value = player.player.getLongProperty("stats.Bedwars.final_deaths_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field{
+                                        name = "Final K/D"
+                                        value = (player.player.getLongProperty("stats.Bedwars.final_kills_bedwars", 0).toBigDecimal().setScale(2) / player.player.getLongProperty("stats.Bedwars.final_deaths_bedwars", 0).toBigDecimal().setScale(2)).toString()
+                                        inline = true
+                                    }
+                                    field {
+                                        name = "Wins"
+                                        value = player.player.getLongProperty("stats.Bedwars.wins_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field {
+                                        name = "Losses"
+                                        value = player.player.getLongProperty("stats.Bedwars.losses_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field{
+                                        name = "W/L Ratio"
+                                        value = (player.player.getLongProperty("stats.Bedwars.wins_bedwars", 0).toBigDecimal().setScale(2) / player.player.getLongProperty("stats.Bedwars.losses_bedwars", 0).toBigDecimal().setScale(2)).toString()
+                                        inline = true
+                                    }
                                 }
                             }
                         }
