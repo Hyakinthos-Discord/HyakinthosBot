@@ -20,6 +20,8 @@ repositories {
 
     maven { url = uri("https://eldonexus.de/repository/maven-public/") }
 
+    maven { url = uri("https://m2.dv8tion.net/releases") }
+
     maven {
         name = "Sonatype Snapshots"
         url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots")
@@ -35,6 +37,7 @@ dependencies {
     implementation("net.hypixel:hypixel-api:4.3")
     implementation("net.hypixel:hypixel-api-transport-apache:4.3")
     implementation("de.snowii:mojang-api:1.1.0")
+    implementation("com.sedmelluq:lavaplayer:1.3.77")
 }
 
 application {
