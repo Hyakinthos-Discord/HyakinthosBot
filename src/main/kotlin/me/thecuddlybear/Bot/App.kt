@@ -1,6 +1,7 @@
 package me.thecuddlybear.Bot
 
 import com.kotlindiscord.kord.extensions.ExtensibleBot
+import dev.kord.common.entity.PresenceStatus
 import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
 import me.thecuddlybear.Bot.extensions.HypixelExtension
@@ -20,8 +21,14 @@ suspend fun main() {
             add(::HypixelExtension)
         }
 
+        presence {
+            status = PresenceStatus.DoNotDisturb
+
+            watching("Ruiz hacking")
+        }
+
         applicationCommands {
-            defaultGuild("688559550051385372")
+            defaultGuild("851831355229601844")
         }
 
         chatCommands  {
