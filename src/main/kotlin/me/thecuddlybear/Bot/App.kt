@@ -66,7 +66,7 @@ suspend fun main() {
         }
     }
 
-    lavalink.addNode("ws://localhost:2333", "youshallnotpass")
+    lavalink.addNode(dotenv["LAVALINK_URL"], dotenv["LAVALINK_PASS"])
 
     bot.start()
 
