@@ -1,16 +1,30 @@
 package me.thecuddlybear.Bot
 
 import com.kotlindiscord.kord.extensions.ExtensibleBot
+import dev.arbjerg.lavalink.protocol.v4.LoadResult
+import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.common.entity.PresenceStatus
+import dev.kord.common.entity.Snowflake
+import dev.kord.core.entity.Guild
 import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
+import dev.schlaubi.lavakord.LavaKord
+import dev.schlaubi.lavakord.kord.lavakord
+import dev.schlaubi.lavakord.plugins.lavasrc.LavaSrc
+import dev.schlaubi.lavakord.plugins.sponsorblock.Sponsorblock
 import me.thecuddlybear.Bot.extensions.HypixelExtension
 import me.thecuddlybear.Bot.extensions.MusicExtension
 import me.thecuddlybear.Bot.extensions.SlapExtension
 import org.dotenv.vault.dotenvVault
 
-public val dotenv = dotenvVault()
+val dotenv = dotenvVault()
 private val TOKEN = dotenv["TOKEN"]
+
+lateinit var lavalink: LavaKord
+
+
+val listeners = mutableMapOf<String, String>()
+val queues = mutableMapOf<String,ArrayDeque<Track>>()
 
 suspend fun main() {
 
@@ -44,6 +58,15 @@ suspend fun main() {
             +Intent.GuildMessages
         }
     }
+
+    lavalink = bot.kordRef.lavakord {
+        plugins {
+            install(LavaSrc)
+            install(Sponsorblock)
+        }
+    }
+
+    lavalink.addNode("ws://localhost:2333", "youshallnotpass")
 
     bot.start()
 

@@ -22,6 +22,10 @@ repositories {
 
     maven { url = uri("https://m2.dv8tion.net/releases") }
 
+    maven { url = uri("https://maven.arbjerg.dev/snapshots") }
+
+    maven { url = uri("https://repo1.maven.org/maven2") }
+
     maven {
         name = "Sonatype Snapshots"
         url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots")
@@ -38,6 +42,10 @@ dependencies {
     implementation("net.hypixel:hypixel-api-transport-apache:4.3")
     implementation("de.snowii:mojang-api:1.1.0")
     implementation("com.sedmelluq:lavaplayer:1.3.77")
+    implementation("dev.schlaubi.lavakord:kord:5.1.7")
+    implementation("dev.schlaubi.lavakord:sponsorblock:5.1.7")
+    implementation("dev.schlaubi.lavakord:lavasrc:5.1.7")
+
 }
 
 application {
