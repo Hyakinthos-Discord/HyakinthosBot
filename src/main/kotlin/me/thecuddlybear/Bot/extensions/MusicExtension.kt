@@ -65,7 +65,7 @@ class MusicExtension : Extension() {
                                 respond { content = "Playing the track" }
                             }else{
                                 queues[guild?.id.toString()]?.add(item.data)
-                                respond { content = "Added the song to the queue!" }
+                                respond { content = "Added ```${item.data.info.title} - ${item.data.info.author}``` to the queue!" }
                             }
                         }
                         is LoadResult.PlaylistLoaded -> {
@@ -78,14 +78,14 @@ class MusicExtension : Extension() {
                         }
 
                         is LoadResult.LoadFailed -> respond { content = item.data.message ?: "Exception" }
-                        is LoadResult.NoMatches -> respond { content = "Could not fine the song"}
+                        is LoadResult.NoMatches -> respond { content = "Could not find the song"}
                         is LoadResult.SearchResult -> {
                             if(player.playingTrack == null){
                                 player.playTrack(track = item.data.tracks.first())
                                 respond { content = "Playing the track" }
                             }else{
                                 queues[guild?.id.toString()]?.add(item.data.tracks.first())
-                                respond { content = "Added the song to the queue!" }
+                                respond { content = "Added ```${item.data.tracks.first().info.title} - ${item.data.tracks.first().info.author}``` to the queue!" }
                             }
                         }
                     }
@@ -112,7 +112,7 @@ class MusicExtension : Extension() {
 
                     val channel = bot.kordRef.getGuild(Snowflake(guildId)).getChannel(Snowflake(channelID.toString())).asChannelOf<TextChannel>()
                     channel.createMessage {
-                        content = "Now playing: ${track.info.title} - ${track.info.author}"
+                        content = "Now playing: ```${track.info.title} - ${track.info.author}```"
                     }
 
                 }
