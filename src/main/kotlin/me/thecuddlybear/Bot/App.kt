@@ -29,6 +29,7 @@ suspend fun main() {
             add(::AnimeActionsExtension)
             add(::AnimeCommandsExtension)
             add(::EventHandlingExtension)
+            add(::AiExtension)
         }
 
         presence {
