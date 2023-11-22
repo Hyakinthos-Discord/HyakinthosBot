@@ -55,7 +55,7 @@ class AiExtension: Extension() {
                 if (threadMap.containsKey(messChannelId) && !event.message.author!!.isBot){
                     val channel = event.message.getChannel()
                     channel.withTyping {
-                        val prompt = threadMap.get(messChannelId) + "[Your name is Satan and you are an AI Language Model that acts like satan]\n### Instruction:\n${event.message.content}\n### Response:\n"
+                        val prompt = threadMap.get(messChannelId) + "\n### Instruction:\n${event.message.content}\n### Response:\n"
                         val textParam: HordeTextParams = HordeTextParams(
                             n = 1,
                             max_context_length = 1600,
