@@ -5,9 +5,17 @@ import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
+import dev.kord.common.entity.ArchiveDuration
+import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.interaction.followup.edit
 import dev.kord.core.entity.channel.TextChannel
+import dev.kord.core.entity.channel.thread.TextChannelThread
+import dev.kord.core.event.message.MessageCreateEvent
 import io.ktor.client.*
+import com.kotlindiscord.kord.extensions.extensions.event
+import dev.kord.common.entity.Snowflake
+import dev.kord.core.behavior.channel.withTyping
+import dev.kord.core.behavior.reply
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -88,6 +96,8 @@ data class HordeTextResponse(
 
 class AiExtension: Extension() {
 
+    var threadMap: MutableMap<Snowflake, String> = mutableMapOf()
+
     override val name: String
         get() = "ai"
     
@@ -99,14 +109,123 @@ class AiExtension: Extension() {
 
     override suspend fun setup() {
 
+        event<MessageCreateEvent>{
+            action {
+                val messChannelId = event.message.channelId
+
+                if (threadMap.containsKey(messChannelId) && !event.message.author!!.isBot){
+                    val channel = event.message.getChannel()
+                    channel.withTyping {
+                        val prompt = threadMap.get(messChannelId) + "\n### Instruction:\n${event.message.content}\n### Response:\n"
+                        val textParam: HordeTextParams = HordeTextParams(
+                            n = 1,
+                            max_context_length = 1600,
+                            max_length = 120,
+                            rep_pen = 1.1,
+                            rep_pen_range = 320,
+                            rep_pen_slope = 0.7,
+                            singleline = false,
+                            temperature = 0.7,
+                            tfs = 1,
+                            top_a = 0,
+                            top_k = 100,
+                            top_p = 0.92,
+                            typical = 1,
+                            sampler_order = arrayOf(6, 0, 1, 3, 4, 2, 5),
+                            use_default_badwordsids = true,
+                            stop_sequence = arrayOf("### Instruction:", "### Response:")
+                        )
+
+                        val payload: HordePayload = HordePayload(
+                            prompt = prompt,
+                            params = textParam,
+                            softprompt = "string",
+                            trusted_workers = false,
+                            slow_workers = true,
+                            workers = arrayOf(),
+                            worker_blacklist = false,
+                            models = arrayOf("koboldcpp/OpenHermes-2.5-Mistral-7b", "aphrodite/Chronomaid-Storytelling-13b", "aphrodite/KoboldAI/LLaMA2-13B-Tiefighter", "KoboldAI/LLaMA2-13B-Tiefighter", "koboldcpp/mistrp-airoboros-7b", "koboldcpp/MythoLogic-Mini-7B"),
+                            dry_run = false
+                        )
+
+                        val initialResponse : HttpResponse = httpClient.post("https://stablehorde.net/api/v2/generate/text/async") {
+                            header("apikey", dotenv["AIHORDE"])
+                            contentType(ContentType.Application.Json)
+                            setBody(payload)
+                        }
+
+
+                        if (initialResponse.status.value.equals(202)){
+                            val responseBody: HordeResponse = initialResponse.body()
+
+                            var statusResponse : HttpResponse = httpClient.get("https://stablehorde.net/api/v2/generate/text/status/${responseBody.id}")
+                            var statusData : HordeTextResponse = statusResponse.body()
+
+                            do {
+                                statusResponse = httpClient.get("https://stablehorde.net/api/v2/generate/text/status/${responseBody.id}")
+                                statusData = statusResponse.body()
+                                delay(1000)
+                            }while (statusData.finished != 1)
+
+                            val responseText = statusData.generations.first().text.removeSuffix("### Instruction:")
+
+                            createMessage(responseText)
+                            val old = threadMap.get(messChannelId)
+                            threadMap[messChannelId] = old + "\n### Instruction:\n${event.message.content}\n### Response:\n${responseText}"
+
+                        }else{
+                            val responseBody: HordeResponse = initialResponse.body()
+
+                            createMessage("Error! ${responseBody.message}")
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+        publicSlashCommand {
+            name = "closeconversation"
+            description = "End the conversation"
+
+            action {
+                val channelId = channel.id
+
+                if (!threadMap.containsKey(channelId)){
+                    respond {
+                        content = "This is not a conversation thread/channel! Cannot close it"
+                    }
+                }else {
+                    respond { content = "Closing the conversation!" }
+                    delay(2000)
+                    threadMap.remove(channelId)
+                    channel.delete("Thread closed!")
+                }
+
+            }
+        }
+
         publicSlashCommand {
             name = "conversation"
             description = "Opens a thread to make a conversation with the AI"
 
             action {
+                val mess = respond {
+                    content = "Starting A new conversation! You can talk to me in the attached thread :)"
+                }
 
+                val channel: TextChannel = mess.channel.asChannel() as TextChannel
+
+                val thead = channel.startPublicThreadWithMessage(mess.id, "Hello") {
+                    name = "AI Conversation"
+                    autoArchiveDuration = ArchiveDuration.Hour
+                }
+
+                thead.createMessage { content = "Hello! You can start conversing with me here! How can I help you?" }
+
+                threadMap.put(thead.id, "### Response: Hello! You can start conversing with me here! How can I help you?")
             }
-
         }
 
         publicSlashCommand(::AskArguments) {
