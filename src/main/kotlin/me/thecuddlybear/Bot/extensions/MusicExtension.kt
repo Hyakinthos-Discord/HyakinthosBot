@@ -19,11 +19,19 @@ import me.thecuddlybear.Bot.listeners
 import me.thecuddlybear.Bot.queues
 import org.koin.core.component.get
 
+/**
+ * Represents a music extension for a chat bot. This extension provides commands to play, connect, pause, skip, and stop music.
+ */
 class MusicExtension : Extension() {
 
     override val name: String = "music"
 
+    /**
+     * Sets up the commands for playing, pausing, skipping, and stopping songs in a voice channel.
+     * This method should be called when the bot is initialized.
+     */
     override suspend fun setup() {
+
         publicSlashCommand(::PlayArguments) {
             name = "play"
             description = "Play a song!"
