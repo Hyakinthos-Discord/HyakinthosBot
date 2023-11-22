@@ -195,7 +195,7 @@ class AiExtension: Extension() {
                 val imagePayload = HordeImagePayload(
                     censor_nsfw = false,
                     models = arrayOf("Dreamshaper"),
-                    nsfw = true,
+                    nsfw = false,
                     params = imageParam,
                     prompt = arguments.question,
                     r2 = true,
