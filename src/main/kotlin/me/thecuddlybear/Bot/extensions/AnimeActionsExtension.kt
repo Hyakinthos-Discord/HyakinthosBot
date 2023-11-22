@@ -14,9 +14,17 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
-
+/**
+ * A data class representing a JSON response from a given URL.
+ *
+ * @property url The URL from which the JSON response was obtained.
+ */
 @Serializable
 data class JsonResponse(val url: String)
+
+/**
+ * An extension class that provides anime-related actions for the bot.
+ */
 class AnimeActionsExtension : Extension() {
 
     override val name: String = "anime"
