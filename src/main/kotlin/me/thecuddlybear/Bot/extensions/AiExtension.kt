@@ -120,7 +120,7 @@ class AiExtension: Extension() {
                         val textParam: HordeTextParams = HordeTextParams(
                             n = 1,
                             max_context_length = 1600,
-                            max_length = 120,
+                            max_length = 140,
                             rep_pen = 1.1,
                             rep_pen_range = 320,
                             rep_pen_slope = 0.7,
@@ -238,7 +238,7 @@ class AiExtension: Extension() {
                 val textParam: HordeTextParams = HordeTextParams(
                     n = 1,
                     max_context_length = 1600,
-                    max_length = 120,
+                    max_length = 140,
                     rep_pen = 1.1,
                     rep_pen_range = 320,
                     rep_pen_slope = 0.7,
@@ -262,7 +262,7 @@ class AiExtension: Extension() {
                     slow_workers = true,
                     workers = arrayOf(),
                     worker_blacklist = false,
-                    models = arrayOf("koboldcpp/OpenHermes-2.5-Mistral-7b", "aphrodite/Chronomaid-Storytelling-13b", "aphrodite/KoboldAI/LLaMA2-13B-Tiefighter", "KoboldAI/LLaMA2-13B-Tiefighter", "koboldcpp/mistrp-airoboros-7b", "koboldcpp/MythoLogic-Mini-7B"),
+                    models = arrayOf("koboldcpp/OpenHermes-2.5-Mistral-7b", "koboldcpp/LLaMA2-13B-Psyfighter2", "koboldcpp/neural-chat-7b-v3-1.Q8_0", "koboldcpp/openchat_3.5-7b", "koboldcpp/Orca-2-13B-q8_0","aphrodite/KoboldAI/LLaMA2-13B-Tiefighter", "KoboldAI/LLaMA2-13B-Tiefighter", "koboldcpp/mistrp-airoboros-7b", "koboldcpp/MythoLogic-Mini-7B"),
                     dry_run = false
                 )
                 
