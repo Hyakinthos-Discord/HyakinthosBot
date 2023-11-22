@@ -20,9 +20,14 @@ lateinit var lavalink: LavaKord
 val listeners = mutableMapOf<String, String>()
 val queues = mutableMapOf<String,ArrayDeque<Track>>()
 
+/**
+ * This is the main class for the application.
+ * It contains the main function which is the entry point of the application.
+ */
 suspend fun main() {
 
     val bot = ExtensibleBot(TOKEN){
+        // Add bot extensions
         extensions {
             add(::MusicExtension)
             add(::HypixelExtension)
@@ -56,6 +61,7 @@ suspend fun main() {
         }
     }
 
+    // Initialize lavalink for music
     lavalink = bot.kordRef.lavakord {
         plugins {
             install(LavaSrc)
@@ -63,6 +69,7 @@ suspend fun main() {
         }
     }
 
+    // Add the node given in the config
     lavalink.addNode(dotenv["LAVALINK_URL"], dotenv["LAVALINK_PASS"])
 
     bot.start()

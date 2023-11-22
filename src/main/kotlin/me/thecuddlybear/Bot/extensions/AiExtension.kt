@@ -5,6 +5,8 @@ import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
+import dev.kord.core.behavior.interaction.followup.edit
+import dev.kord.core.entity.channel.TextChannel
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
@@ -13,10 +15,10 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
+import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 import me.thecuddlybear.Bot.dotenv
 import java.nio.file.Path
-
 
 @Serializable
 data class HordeTextParams(
@@ -97,6 +99,16 @@ class AiExtension: Extension() {
 
     override suspend fun setup() {
 
+        publicSlashCommand {
+            name = "conversation"
+            description = "Opens a thread to make a conversation with the AI"
+
+            action {
+
+            }
+
+        }
+
         publicSlashCommand(::AskArguments) {
             name = "ask"
             description = "Ask a LLaMa 2 13B model something"
@@ -131,7 +143,7 @@ class AiExtension: Extension() {
                     slow_workers = true,
                     workers = arrayOf(),
                     worker_blacklist = false,
-                    models = arrayOf("koboldcpp/OpenHermes-2.5-Mistral-7b"),
+                    models = arrayOf("koboldcpp/OpenHermes-2.5-Mistral-7b", "aphrodite/Chronomaid-Storytelling-13b", "aphrodite/KoboldAI/LLaMA2-13B-Tiefighter", "KoboldAI/LLaMA2-13B-Tiefighter", "koboldcpp/mistrp-airoboros-7b", "koboldcpp/MythoLogic-Mini-7B"),
                     dry_run = false
                 )
                 
@@ -147,16 +159,20 @@ class AiExtension: Extension() {
                     var statusResponse : HttpResponse = httpClient.get("https://stablehorde.net/api/v2/generate/text/status/${responseBody.id}")
                     var statusData : HordeTextResponse = statusResponse.body()
                     
+                    val mess = respond {
+                        content = "Generating Response..."
+                    }
+
                     do {
                         statusResponse = httpClient.get("https://stablehorde.net/api/v2/generate/text/status/${responseBody.id}")
                         statusData = statusResponse.body()
-                        
+                        mess.edit { content = "Generating Response... Queue Position: ${statusData.queue_position}" }
+                        delay(1000)
                     }while (statusData.finished != 1)
                     
-                    respond {
-                        content = "${statusData.generations.first().text}"
-                    }
+                    val responseText = statusData.generations.first().text.removeSuffix("### Instruction:")
                     
+                    mess.edit { content = responseText }
                     
                 }else{
                     val responseBody: HordeResponse = initialResponse.body()
