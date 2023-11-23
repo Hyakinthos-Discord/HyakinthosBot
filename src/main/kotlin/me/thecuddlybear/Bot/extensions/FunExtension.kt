@@ -42,7 +42,7 @@ class FunExtension : Extension() {
                     val facts: JsonArray = body["facts"] as JsonArray
 
                     respond {
-                        content = "Sure here's a random fact: ${facts.first().toString()}"
+                        content = "Sure here's a random fact: `${facts.first().toString()}`"
                     }
 
                 }
