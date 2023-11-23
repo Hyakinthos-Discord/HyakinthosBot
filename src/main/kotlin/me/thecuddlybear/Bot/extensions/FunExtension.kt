@@ -27,6 +27,21 @@ class FunExtension : Extension() {
 
     override suspend fun setup() {
 
+        publicSlashCommand {
+            name = "pic"
+            description = "Gets a random picture"
+
+            publicSubCommand {
+                name = "cat"
+                description = "Gets a random picture of a cat"
+
+                action{
+                    respond { content = "https://cataas.com/cat"}
+                }
+
+            }
+        }
+
         publicSlashCommand{
             name = "facts"
             description = "Gives a random fact"
