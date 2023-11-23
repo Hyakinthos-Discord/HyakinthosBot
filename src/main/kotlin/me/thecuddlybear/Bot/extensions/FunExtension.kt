@@ -40,6 +40,22 @@ class FunExtension : Extension() {
                 }
 
             }
+
+            publicSubCommand {
+                name = "dog"
+                description = "Gets a random picture of a dog"
+
+                action {
+
+                    val response: HttpResponse = client.get("https://dog.ceo/api/breeds/image/random")
+                    val body: JsonObject = response.body()
+
+                    respond {
+                        content = body["message"].toString().removePrefix("\"").removeSuffix("\"")
+                    }
+                }
+            }
+
         }
 
         publicSlashCommand{
