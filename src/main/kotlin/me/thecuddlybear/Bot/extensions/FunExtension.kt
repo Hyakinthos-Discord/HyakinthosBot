@@ -49,6 +49,24 @@ class FunExtension : Extension() {
 
             }
 
+            publicSubCommand {
+                name = "cat"
+                description = "Gives a random cat fact"
+
+                action {
+
+                    val response: HttpResponse = client.get("https://meowfacts.herokuapp.com/")
+                    val body: JsonObject = response.body()
+                    val facts: JsonArray = body["data"] as JsonArray
+
+                    respond {
+                        content = "Sure here's a random fact: `${facts.first().toString()}`"
+                    }
+
+                }
+
+            }
+
         }
 
 
