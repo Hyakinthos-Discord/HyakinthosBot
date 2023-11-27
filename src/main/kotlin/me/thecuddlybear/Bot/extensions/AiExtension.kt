@@ -13,6 +13,7 @@ import io.ktor.client.*
 import com.kotlindiscord.kord.extensions.extensions.event
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.channel.withTyping
+import io.github.jan.supabase.postgrest.postgrest
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -22,9 +23,14 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.sentry.DateUtils
 import kotlinx.coroutines.delay
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 import me.thecuddlybear.Bot.dotenv
+import me.thecuddlybear.Bot.extensions.api.Conversation
 import me.thecuddlybear.Bot.extensions.models.*
+import me.thecuddlybear.Bot.supaClient
 import java.time.format.DateTimeFormatter
 
 /**
@@ -52,10 +58,17 @@ class AiExtension: Extension() {
             action {
                 val messChannelId = event.message.channelId
 
-                if (threadMap.containsKey(messChannelId) && !event.message.author!!.isBot){
+                val threads = supaClient.postgrest["conversation"].select {
+                    Conversation::thread_id eq messChannelId.toString().toLong()
+                }.decodeList<Conversation>()
+
+
+                if (threads.isNotEmpty() && !event.member?.isBot!!){
                     val channel = event.message.getChannel()
+                    val prevPrompt = threads.first().prompt
+
                     channel.withTyping {
-                        val prompt = threadMap.get(messChannelId) + "\n### Instruction:\n${event.message.content}\n### Response:\n"
+                        val prompt = prevPrompt + "\n### Instruction:\n${event.message.content}\n### Response:\n"
                         val textParam: HordeTextParams = HordeTextParams(
                             n = 1,
                             max_context_length = 1600,
@@ -110,9 +123,13 @@ class AiExtension: Extension() {
                             responseText = responseText.removeSuffix("### Response:")
 
                             createMessage(responseText)
-                            val old = threadMap.get(messChannelId)
-                            threadMap[messChannelId] = old + "\n### Instruction:\n${event.message.content}\n### Response:\n${responseText}"
-
+                            val update: Conversation = Conversation(
+                                thread_id = messChannelId.toString().toLong(),
+                                guild_id = event.guildId.toString().toLong(),
+                                prompt = prevPrompt + "\n### Instruction:\n${event.message.content}\n### Response:\n${responseText}",
+                                created_at = threads.first().created_at
+                            )
+                            supaClient.postgrest["conversation"].insert(update, upsert = true)
                         }else{
                             val responseBody: HordeResponse = initialResponse.body()
 
@@ -164,7 +181,14 @@ class AiExtension: Extension() {
 
                 thead.createMessage { content = "Hello! You can start conversing with me here! How can I help you?" }
 
-                threadMap.put(thead.id, "### Response: Hello! You can start conversing with me here! How can I help you?")
+                val newThread = Conversation(
+                    thread_id = thead.id.toString().toLong(),
+                    guild_id = thead.guildId.toString().toLong(),
+                    prompt = "### Response: Hello! You can start conversing with me here! How can I help you?",
+                    created_at = Clock.System.now().toEpochMilliseconds()
+                )
+
+                supaClient.postgrest["conversation"].insert(newThread, upsert = true)
             }
         }
 

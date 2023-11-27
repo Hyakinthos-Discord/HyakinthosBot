@@ -54,6 +54,10 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
     implementation("io.ktor:ktor-client-cio-jvm:2.3.6")
     implementation("com.hexadevlabs:gpt4all-java-binding:1.1.5")
+    implementation(platform("io.github.jan-tennert.supabase:bom:1.4.7"))
+    implementation("io.github.jan-tennert.supabase:postgrest-kt")
+    implementation("io.github.jan-tennert.supabase:gotrue-kt")
+    implementation("io.github.jan-tennert.supabase:realtime-kt")
 }
 
 application {
