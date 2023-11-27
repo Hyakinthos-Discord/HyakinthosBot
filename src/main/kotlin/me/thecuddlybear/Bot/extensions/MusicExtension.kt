@@ -218,6 +218,7 @@ class MusicExtension : Extension() {
 
                 queues[guild?.id.toString()] = ArrayDeque<Track>(0)
                 player.stopTrack()
+                link.destroy()
 
                 respond {
                     content = "Stopped playing!"
