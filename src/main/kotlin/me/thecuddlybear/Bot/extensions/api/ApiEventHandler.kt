@@ -18,6 +18,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.boolean
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.long
 import me.thecuddlybear.Bot.supaClient
@@ -64,47 +65,52 @@ class ApiEventHandler : Extension() {
                     if(guildConfig != null){
                         val string = guildConfig["announceChannelId"].toString().removePrefix("\"").removeSuffix("\"")
                         announceChannel = Snowflake(string.toLong())
-                    }
 
-                    var lvlData: MemberLevelData
+                        if(guildConfig["leveling"]!!.jsonPrimitive.boolean){
+                            var lvlData: MemberLevelData
 
-                    val userData = supaClient.postgrest["user"].select {
-                        MemberData::id eq event.message.author?.id.toString().toLong()
-                    }.decodeList<MemberData>()
+                            val userData = supaClient.postgrest["user"].select {
+                                MemberData::id eq event.message.author?.id.toString().toLong()
+                            }.decodeList<MemberData>()
 
-                    val levelData = supaClient.postgrest["level"].select {
-                        MemberLevelData::id eq event.message.author?.id.toString().toLong() + event.guildId.toString().toLong() - event.guildId.toString().first().code.toLong()
-                    }.decodeList<MemberLevelData>()
+                            val levelData = supaClient.postgrest["level"].select {
+                                MemberLevelData::id eq event.message.author?.id.toString().toLong() + event.guildId.toString().toLong() - event.guildId.toString().first().code.toLong()
+                            }.decodeList<MemberLevelData>()
 
-                    if (userData.isEmpty()){
-                        val username = event.message.author!!.username
-                        val id = event.message.author!!.id.toString().toLong()
+                            if (userData.isEmpty()){
+                                val username = event.message.author!!.username
+                                val id = event.message.author!!.id.toString().toLong()
 
-                        val member = MemberData(id = id, username = username, created_at = Clock.System.now().toEpochMilliseconds())
+                                val member = MemberData(id = id, username = username, created_at = Clock.System.now().toEpochMilliseconds())
 
-                        supaClient.postgrest["user"].insert(member, upsert = true)
-                    }
-
-                    if(levelData.isEmpty()){
-                        lvlData = MemberLevelData(id = event.message.author?.id.toString().toLong() + event.guildId.toString().toLong() - event.guildId.toString().first().code.toLong(), xp = 0, level = 0)
-                        supaClient.postgrest["level"].insert(lvlData, upsert = true)
-                    }else{
-                        val prevData = levelData.first()
-                        val update = event.message.timestamp.toEpochMilliseconds()
-                        if (Math.abs(prevData.updated!! - update) > 12000 && xp > 0){
-                            val level = xpToLevel((prevData.xp+xp))
-
-                            if(level > prevData.level){
-                                if (announceChannel != null) {
-                                    val chann: TextChannel = event.getGuildOrNull()?.getChannel(announceChannel)?.asChannel() as TextChannel
-                                    chann.createMessage("${event.message.author?.mention} has leveled up! ${prevData.level} ➜ ${level}")
-                                }
+                                supaClient.postgrest["user"].insert(member, upsert = true)
                             }
 
-                            val lvlData = MemberLevelData(id = event.message.author?.id.toString().toLong() + event.guildId.toString().toLong() - event.guildId.toString().first().code.toLong(), xp = prevData.xp+xp, level = level, updated=update)
-                            supaClient.postgrest["level"].insert(lvlData, upsert = true)
+                            if(levelData.isEmpty()){
+                                lvlData = MemberLevelData(id = event.message.author?.id.toString().toLong() + event.guildId.toString().toLong() - event.guildId.toString().first().code.toLong(), xp = 0, level = 0)
+                                supaClient.postgrest["level"].insert(lvlData, upsert = true)
+                            }else{
+                                val prevData = levelData.first()
+                                val update = event.message.timestamp.toEpochMilliseconds()
+                                if (Math.abs(prevData.updated!! - update) > 12000 && xp > 0){
+                                    val level = xpToLevel((prevData.xp+xp))
+
+                                    if(level > prevData.level){
+                                        if (announceChannel != null) {
+                                            val chann: TextChannel = event.getGuildOrNull()?.getChannel(announceChannel)?.asChannel() as TextChannel
+                                            chann.createMessage("${event.message.author?.mention} has leveled up! ${prevData.level} ➜ ${level}")
+                                        }
+                                    }
+
+                                    val lvlData = MemberLevelData(id = event.message.author?.id.toString().toLong() + event.guildId.toString().toLong() - event.guildId.toString().first().code.toLong(), xp = prevData.xp+xp, level = level, updated=update)
+                                    supaClient.postgrest["level"].insert(lvlData, upsert = true)
+                                }
+                            }
                         }
+
                     }
+
+
                 }
             }
         }
