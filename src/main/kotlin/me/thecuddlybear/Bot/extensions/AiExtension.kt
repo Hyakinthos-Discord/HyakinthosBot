@@ -45,7 +45,7 @@ class AiExtension: Extension() {
 
     override val name: String
         get() = "ai"
-    
+
     val httpClient = HttpClient(CIO) {
         install(ContentNegotiation){
             json()
@@ -272,7 +272,7 @@ class AiExtension: Extension() {
 
             action {
                 val prompt = "\n### Instruction:\n${arguments.question}\n### Response:\n"
-                
+
                 val textParam: HordeTextParams = HordeTextParams(
                     n = 1,
                     max_context_length = 1600,
@@ -291,7 +291,7 @@ class AiExtension: Extension() {
                     use_default_badwordsids = true,
                     stop_sequence = arrayOf("### Instruction:", "### Response:")
                 )
-                
+
                 val payload: HordeTextPayload = HordeTextPayload(
                     prompt = prompt,
                     params = textParam,
@@ -303,19 +303,19 @@ class AiExtension: Extension() {
                     models = arrayOf("koboldcpp/OpenHermes-2.5-Mistral-7b", "koboldcpp/LLaMA2-13B-Psyfighter2", "koboldcpp/neural-chat-7b-v3-1.Q8_0", "koboldcpp/openchat_3.5-7b", "koboldcpp/Orca-2-13B-q8_0","aphrodite/KoboldAI/LLaMA2-13B-Tiefighter", "KoboldAI/LLaMA2-13B-Tiefighter", "koboldcpp/mistrp-airoboros-7b", "koboldcpp/MythoLogic-Mini-7B"),
                     dry_run = false
                 )
-                
+
                 val initialResponse : HttpResponse = httpClient.post("https://stablehorde.net/api/v2/generate/text/async") {
                     header("apikey", dotenv["AIHORDE"])
                     contentType(ContentType.Application.Json)
                     setBody(payload)
                 }
-                
+
                 if (initialResponse.status.value.equals(202)){
                     val responseBody: HordeResponse = initialResponse.body()
-                    
+
                     var statusResponse : HttpResponse = httpClient.get("https://stablehorde.net/api/v2/generate/text/status/${responseBody.id}")
                     var statusData : HordeTextResponse = statusResponse.body()
-                    
+
                     val mess = respond {
                         content = "Generating Response..."
                     }
@@ -326,12 +326,12 @@ class AiExtension: Extension() {
                         mess.edit { content = "Generating Response... Queue Position: ${statusData.queue_position}" }
                         delay(1000)
                     }while (statusData.finished != 1)
-                    
+
                     var responseText = statusData.generations.first().text.removeSuffix("### Instruction:")
                     responseText = responseText.removeSuffix("### Response:")
-                    
+
                     mess.edit { content = responseText }
-                    
+
                 }else{
                     val responseBody: HordeResponse = initialResponse.body()
 
@@ -339,13 +339,13 @@ class AiExtension: Extension() {
                         content = "Error! ${responseBody.message}"
                     }
                 }
-                
+
             }
 
         }
 
     }
-    
+
     inner class AskArguments : Arguments() {
         val question by string {
             name = "prompt"
