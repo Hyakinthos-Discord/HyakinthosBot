@@ -159,9 +159,13 @@ class MusicExtension : Extension() {
                     }
                 }
 
-                link.connect(channelId)
-                respond {
-                    content = "I have connected to the voice channel!"
+                if(link.state != Link.State.CONNECTED){
+                    link.connect(channelId)
+                    respond {
+                        content = "I have connected to the voice channel!"
+                    }
+                }else{
+                    respond { content = "I am already connected to a voice channel!" }
                 }
             }
         }
