@@ -60,6 +60,8 @@ class MusicExtension : Extension() {
                     player.on<TrackEndEvent> {
                         if(queues[guildId.toString()]?.isNotEmpty() == true){
                             player.playTrack(track = queues[guildId.toString()]?.removeFirst() as Track)
+                        }else {
+                            link.disconnectAudio()
                         }
                     }
                 }
