@@ -18,7 +18,7 @@ class EventHandlingExtension : Extension() {
     override suspend fun setup() {
         event<MessageCreateEvent> {
             action {
-                if(event.member != null{
+                if(event.member != null){
                     if(!event.member?.isBot!!){
                         if(event.message.content == "skibidi"){
                             event.message.reply {
