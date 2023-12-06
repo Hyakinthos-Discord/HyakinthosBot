@@ -18,26 +18,30 @@ class EventHandlingExtension : Extension() {
     override suspend fun setup() {
         event<MessageCreateEvent> {
             action {
-                if(event.message.content == "skibidi"){
-                    event.message.reply {
-                        content = "toilet"
+                if(event.member != null{
+                    if(!event.member?.isBot!!){
+                        if(event.message.content == "skibidi"){
+                            event.message.reply {
+                                content = "toilet"
+                            }
+                        }
+                        if(event.message.content.lowercase().contains("ruiz")){
+                            event.message.reply {
+                                content = "ruhizzz"
+                            }
+                        }
+                        if(event.message.content.lowercase().contains("caption")){
+                            event.message.reply {
+                                content = "cola"
+                            }
+                        }
+                        if(event.message.content.lowercase().contains("ben")){
+                            event.message.reply {
+                                content = "Ben????????"
+                            }
+                        }
                     }
-                }
-                if(event.message.content.lowercase().contains("ruiz")){
-                    event.message.reply {
-                        content = "ruhizzz"
-                    }
-                }
-                if(event.message.content.lowercase().contains("caption")){
-                    event.message.reply {
-                        content = "cola"
-                    }
-                }
-                if(event.message.content.lowercase().contains("ben")){
-                    event.message.reply {
-                        content = "Ben????????"
-                    }
-                }
+                }     
             }
         }
 
