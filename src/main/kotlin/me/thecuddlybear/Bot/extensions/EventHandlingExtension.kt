@@ -28,6 +28,16 @@ class EventHandlingExtension : Extension() {
                         content = "ruhizzz"
                     }
                 }
+                if(event.message.content.lowercase().contains("caption")){
+                    event.message.reply {
+                        content = "cola"
+                    }
+                }
+                if(event.message.content.lowercase().contains("ben")){
+                    event.message.reply {
+                        content = "Ben????????"
+                    }
+                }
             }
         }
 
