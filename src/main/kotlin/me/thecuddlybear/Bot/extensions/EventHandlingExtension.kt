@@ -12,6 +12,16 @@ import dev.kord.rest.builder.message.create.FollowupMessageCreateBuilder
 
 class EventHandlingExtension : Extension() {
 
+    fun probability(percent: Int, block: () -> Unit = {}): Boolean {
+
+        val randomNum = (1..100).random()
+
+        return if (randomNum <= percent) {
+            block()
+            true
+        } else false
+    }
+
     override val name: String
         get() = "EventHandler"
 
@@ -19,7 +29,7 @@ class EventHandlingExtension : Extension() {
         event<MessageCreateEvent> {
             action {
                 if(event.member != null){
-                    if(!event.member?.isBot!!){
+                    if(!event.member?.isBot!! && probability(35)){
                         if(event.message.content == "skibidi"){
                             event.message.reply {
                                 content = "toilet"

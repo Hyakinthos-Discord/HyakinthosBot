@@ -18,6 +18,9 @@ import io.github.jan.supabase.serializer.KotlinXSerializer
 import me.thecuddlybear.Bot.extensions.*
 import me.thecuddlybear.Bot.extensions.api.ApiEventHandler
 import org.dotenv.vault.dotenvVault
+import java.util.Timer
+import java.util.logging.Handler
+import kotlin.concurrent.timerTask
 
 val dotenv = dotenvVault()
 private val TOKEN = dotenv["TOKEN"]
@@ -36,11 +39,14 @@ val supaClient = createSupabaseClient(
     install(Realtime)
 }
 
+
 /**
  * This is the main class for the application.
  * It contains the main function which is the entry point of the application.
  */
 suspend fun main() {
+
+    val timer = Timer()
 
     val bot = ExtensibleBot(TOKEN){
         // Add bot extensions
@@ -79,6 +85,10 @@ suspend fun main() {
         }
     }
 
+    //timer.scheduleAtFixedRate(timerTask() { changeStatus(bot) }, 5000, 5000)
+
+
+
     // Initialize lavalink for music
     lavalink = bot.kordRef.lavakord {
         plugins {
@@ -92,4 +102,11 @@ suspend fun main() {
 
     bot.start()
 
+}
+
+suspend fun changeStatus(bot: ExtensibleBot){
+    bot.kordRef.editPresence {
+        status = PresenceStatus.DoNotDisturb
+        watching("deuren")
+    }
 }
