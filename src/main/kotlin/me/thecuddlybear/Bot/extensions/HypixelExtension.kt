@@ -82,7 +82,7 @@ class HypixelExtension : Extension() {
 
 
                 action {
-                    val player: PlayerReply? = hypixel.getPlayerByUuid(MojangAPI.getGameProfile(arguments.plauer)?.uuid).get()
+                    val player: PlayerReply? = hypixel.getPlayerByUuid(MojangAPI.getGameProfile(arguments.plauer.removeSuffix(" "))?.uuid).get()
 
                     if(player != null){
                         val bedwarsStats = player.player.getArrayProperty("stats.Bedwars")
@@ -97,7 +97,7 @@ class HypixelExtension : Extension() {
                                         icon = "https://static.wikia.nocookie.net/minecraft/images/c/c5/Bed.png/revision/latest?cb=20191103220226"
                                     }
                                     thumbnail {
-                                        url = "https://cravatar.eu/head/${arguments.plauer}"
+                                        url = "https://mc-heads.net/head/${arguments.plauer}"
                                     }
                                     field{
                                         name = "Coins"
@@ -174,6 +174,238 @@ class HypixelExtension : Extension() {
                                     field{
                                         name = "W/L Ratio"
                                         value = (player.player.getLongProperty("stats.Bedwars.wins_bedwars", 0).toBigDecimal().setScale(2) / player.player.getLongProperty("stats.Bedwars.losses_bedwars", 0).toBigDecimal().setScale(2)).toString()
+                                        inline = true
+                                    }
+                                }
+                            }
+                            "four_three" -> respond {
+                                embed{
+                                    title = "${arguments.plauer}'s 3v3v3v3 Bedwars Stats"
+                                    description = "These are the 3v3v3v3 bedwars stats"
+                                    author {
+                                        name = "${member?.asMember()?.effectiveName} (${user.asUser().globalName})"
+                                        icon = "https://static.wikia.nocookie.net/minecraft/images/c/c5/Bed.png/revision/latest?cb=20191103220226"
+                                    }
+                                    thumbnail {
+                                        url = "https://mc-heads.net/head/${arguments.plauer}"
+                                    }
+                                    field{
+                                        name = "Normal kills"
+                                        value = player.player.getLongProperty("stats.Bedwars.four_three_kills_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field{
+                                        name = "Normal Deaths"
+                                        value = player.player.getLongProperty("stats.Bedwars.four_three_deaths_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field{
+                                        name = "K/D Ratio"
+                                        value = (player.player.getLongProperty("stats.Bedwars.four_three_kills_bedwars", 0).toBigDecimal().setScale(2) / player.player.getLongProperty("stats.Bedwars.four_three_deaths_bedwars", 0).toBigDecimal().setScale(2)).toString()
+                                        inline = true
+                                    }
+                                    field {
+                                        name = "Final Kills"
+                                        value = player.player.getLongProperty("stats.Bedwars.four_three_final_kills_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field {
+                                        name = "Final Deaths"
+                                        value = player.player.getLongProperty("stats.Bedwars.four_three_final_deaths_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field{
+                                        name = "Final K/D"
+                                        value = (player.player.getLongProperty("stats.Bedwars.four_three_final_kills_bedwars", 0).toBigDecimal().setScale(2) / player.player.getLongProperty("stats.Bedwars.four_three_final_deaths_bedwars", 0).toBigDecimal().setScale(2)).toString()
+                                        inline = true
+                                    }
+                                    field {
+                                        name = "Wins"
+                                        value = player.player.getLongProperty("stats.Bedwars.four_three_wins_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field {
+                                        name = "Losses"
+                                        value = player.player.getLongProperty("stats.Bedwars.four_three_losses_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field{
+                                        name = "W/L Ratio"
+                                        value = (player.player.getLongProperty("stats.Bedwars.four_three_wins_bedwars", 0).toBigDecimal().setScale(2) / player.player.getLongProperty("stats.Bedwars.four_three_losses_bedwars", 0).toBigDecimal().setScale(2)).toString()
+                                        inline = true
+                                    }
+                                }
+                            }
+                            "four_four" -> respond {
+                                embed{
+                                    title = "${arguments.plauer}'s 4v4v4v4 Bedwars Stats"
+                                    description = "These are the 4v4v4v4 bedwars stats"
+                                    author {
+                                        name = "${member?.asMember()?.effectiveName} (${user.asUser().globalName})"
+                                        icon = "https://static.wikia.nocookie.net/minecraft/images/c/c5/Bed.png/revision/latest?cb=20191103220226"
+                                    }
+                                    thumbnail {
+                                        url = "https://mc-heads.net/head/${arguments.plauer}"
+                                    }
+                                    field{
+                                        name = "Normal kills"
+                                        value = player.player.getLongProperty("stats.Bedwars.four_four_kills_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field{
+                                        name = "Normal Deaths"
+                                        value = player.player.getLongProperty("stats.Bedwars.four_four_deaths_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field{
+                                        name = "K/D Ratio"
+                                        value = (player.player.getLongProperty("stats.Bedwars.four_four_kills_bedwars", 0).toBigDecimal().setScale(2) / player.player.getLongProperty("stats.Bedwars.four_four_deaths_bedwars", 0).toBigDecimal().setScale(2)).toString()
+                                        inline = true
+                                    }
+                                    field {
+                                        name = "Final Kills"
+                                        value = player.player.getLongProperty("stats.Bedwars.four_four_final_kills_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field {
+                                        name = "Final Deaths"
+                                        value = player.player.getLongProperty("stats.Bedwars.four_four_final_deaths_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field{
+                                        name = "Final K/D"
+                                        value = (player.player.getLongProperty("stats.Bedwars.four_four_final_kills_bedwars", 0).toBigDecimal().setScale(2) / player.player.getLongProperty("stats.Bedwars.four_four_final_deaths_bedwars", 0).toBigDecimal().setScale(2)).toString()
+                                        inline = true
+                                    }
+                                    field {
+                                        name = "Wins"
+                                        value = player.player.getLongProperty("stats.Bedwars.four_four_wins_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field {
+                                        name = "Losses"
+                                        value = player.player.getLongProperty("stats.Bedwars.four_four_losses_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field{
+                                        name = "W/L Ratio"
+                                        value = (player.player.getLongProperty("stats.Bedwars.four_four_wins_bedwars", 0).toBigDecimal().setScale(2) / player.player.getLongProperty("stats.Bedwars.four_four_losses_bedwars", 0).toBigDecimal().setScale(2)).toString()
+                                        inline = true
+                                    }
+                                }
+                            }
+                            "eight_two" -> respond {
+                                embed{
+                                    title = "${arguments.plauer}'s Doubles Bedwars Stats"
+                                    description = "These are the Doubles bedwars stats"
+                                    author {
+                                        name = "${member?.asMember()?.effectiveName} (${user.asUser().globalName})"
+                                        icon = "https://static.wikia.nocookie.net/minecraft/images/c/c5/Bed.png/revision/latest?cb=20191103220226"
+                                    }
+                                    thumbnail {
+                                        url = "https://mc-heads.net/head/${arguments.plauer}"
+                                    }
+                                    field{
+                                        name = "Normal kills"
+                                        value = player.player.getLongProperty("stats.Bedwars.eight_two_kills_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field{
+                                        name = "Normal Deaths"
+                                        value = player.player.getLongProperty("stats.Bedwars.eight_two_deaths_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field{
+                                        name = "K/D Ratio"
+                                        value = (player.player.getLongProperty("stats.Bedwars.eight_two_kills_bedwars", 0).toBigDecimal().setScale(2) / player.player.getLongProperty("stats.Bedwars.four_four_deaths_bedwars", 0).toBigDecimal().setScale(2)).toString()
+                                        inline = true
+                                    }
+                                    field {
+                                        name = "Final Kills"
+                                        value = player.player.getLongProperty("stats.Bedwars.eight_two_final_kills_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field {
+                                        name = "Final Deaths"
+                                        value = player.player.getLongProperty("stats.Bedwars.eight_two_final_deaths_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field{
+                                        name = "Final K/D"
+                                        value = (player.player.getLongProperty("stats.Bedwars.eight_two_final_kills_bedwars", 0).toBigDecimal().setScale(2) / player.player.getLongProperty("stats.Bedwars.eight_two_final_deaths_bedwars", 0).toBigDecimal().setScale(2)).toString()
+                                        inline = true
+                                    }
+                                    field {
+                                        name = "Wins"
+                                        value = player.player.getLongProperty("stats.Bedwars.eight_two_wins_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field {
+                                        name = "Losses"
+                                        value = player.player.getLongProperty("stats.Bedwars.eight_two_losses_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field{
+                                        name = "W/L Ratio"
+                                        value = (player.player.getLongProperty("stats.Bedwars.eight_two_wins_bedwars", 0).toBigDecimal().setScale(2) / player.player.getLongProperty("stats.Bedwars.eight_two_losses_bedwars", 0).toBigDecimal().setScale(2)).toString()
+                                        inline = true
+                                    }
+                                }
+                            }
+                            "eight_one" -> respond {
+                                embed{
+                                    title = "${arguments.plauer}'s Singles Bedwars Stats"
+                                    description = "These are the Singles bedwars stats"
+                                    author {
+                                        name = "${member?.asMember()?.effectiveName} (${user.asUser().globalName})"
+                                        icon = "https://static.wikia.nocookie.net/minecraft/images/c/c5/Bed.png/revision/latest?cb=20191103220226"
+                                    }
+                                    thumbnail {
+                                        url = "https://mc-heads.net/head/${arguments.plauer}"
+                                    }
+                                    field{
+                                        name = "Normal kills"
+                                        value = player.player.getLongProperty("stats.Bedwars.eight_one_kills_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field{
+                                        name = "Normal Deaths"
+                                        value = player.player.getLongProperty("stats.Bedwars.eight_one_deaths_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field{
+                                        name = "K/D Ratio"
+                                        value = (player.player.getLongProperty("stats.Bedwars.eight_one_kills_bedwars", 0).toBigDecimal().setScale(2) / player.player.getLongProperty("stats.Bedwars.eight_one_deaths_bedwars", 0).toBigDecimal().setScale(2)).toString()
+                                        inline = true
+                                    }
+                                    field {
+                                        name = "Final Kills"
+                                        value = player.player.getLongProperty("stats.Bedwars.eight_one_final_kills_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field {
+                                        name = "Final Deaths"
+                                        value = player.player.getLongProperty("stats.Bedwars.eight_one_final_deaths_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field{
+                                        name = "Final K/D"
+                                        value = (player.player.getLongProperty("stats.Bedwars.eight_one_final_kills_bedwars", 0).toBigDecimal().setScale(2) / player.player.getLongProperty("stats.Bedwars.eight_one_final_deaths_bedwars", 0).toBigDecimal().setScale(2)).toString()
+                                        inline = true
+                                    }
+                                    field {
+                                        name = "Wins"
+                                        value = player.player.getLongProperty("stats.Bedwars.eight_one_wins_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field {
+                                        name = "Losses"
+                                        value = player.player.getLongProperty("stats.Bedwars.eight_one_losses_bedwars", 0).toString()
+                                        inline = true
+                                    }
+                                    field{
+                                        name = "W/L Ratio"
+                                        value = (player.player.getLongProperty("stats.Bedwars.eight_one_wins_bedwars", 0).toBigDecimal().setScale(2) / player.player.getLongProperty("stats.Bedwars.eight_one_losses_bedwars", 0).toBigDecimal().setScale(2)).toString()
                                         inline = true
                                     }
                                 }
