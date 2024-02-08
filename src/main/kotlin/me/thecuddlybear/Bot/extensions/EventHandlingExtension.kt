@@ -26,6 +26,8 @@ class EventHandlingExtension : Extension() {
         get() = "EventHandler"
 
     override suspend fun setup() {
+        val regex = """\bben?t""".toRegex()
+
         event<MessageCreateEvent> {
             action {
                 if(event.member != null){
@@ -37,7 +39,7 @@ class EventHandlingExtension : Extension() {
                         }
                         if(event.message.content.lowercase().contains("ruiz")){
                             event.message.reply {
-                                content = "ruhizzz"
+                                content = "ruiz is KAAL"
                             }
                         }
                         if(event.message.content.lowercase().contains("caption")){
@@ -45,7 +47,7 @@ class EventHandlingExtension : Extension() {
                                 content = "cola"
                             }
                         }
-                        if(event.message.content.lowercase().contains("ben")){
+                        if(event.message.content.lowercase().matches(regex)){
                             event.message.reply {
                                 content = "Ben????????"
                             }
